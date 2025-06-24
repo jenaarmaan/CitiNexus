@@ -41,8 +41,10 @@ export default function Home() {
                 </div>
                 <Button asChild size="lg">
                   <Link href="/citizen/submit">
-                    File a New Complaint
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <span>
+                      File a New Complaint
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </span>
                   </Link>
                 </Button>
               </div>

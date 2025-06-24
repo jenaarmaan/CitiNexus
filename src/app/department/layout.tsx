@@ -32,7 +32,7 @@ export default function DepartmentLayout({ children }: { children: React.ReactNo
       <div className="flex min-h-screen">
         <Sidebar>
           <SidebarHeader className="p-4">
-             <Link href="/" className="flex items-center gap-2">
+             <Link href="/" className="flex items-center gap-2" legacyBehavior>
                 <Icons.logo className="h-8 w-8 text-primary" />
                 <h1 className="text-2xl font-bold font-headline text-primary">
                     CityConnect
