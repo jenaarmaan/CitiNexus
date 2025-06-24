@@ -31,19 +31,22 @@ export default function DepartmentLayout({ children }: { children: React.ReactNo
     <SidebarProvider>
       <div className="flex min-h-screen">
         <Sidebar>
-          <SidebarHeader className="p-4">
-             <Link href="/" className="flex items-center gap-2" legacyBehavior>
+          <SidebarHeader className='p-4'>
+            <Link href="/" className="flex items-center gap-2">
+              <>
                 <Icons.logo className="h-8 w-8 text-primary" />
                 <h1 className="text-2xl font-bold font-headline text-primary">
+
                     CityConnect
                 </h1>
+              </>
             </Link>
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.href}>
-                  <Link href={item.href} legacyBehavior passHref>
+                  <Link href={item.href}>
                     <SidebarMenuButton isActive={pathname === item.href}>
                       <item.icon className="h-4 w-4" />
                       <span>{item.label}</span>
