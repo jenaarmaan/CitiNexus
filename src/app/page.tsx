@@ -1,136 +1,85 @@
-import Link from "next/link";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Icons } from "@/components/icons";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+// File: src/app/page.tsx
+'use client';
+
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { Button } from '@/components/ui/button';
+import { Icons } from '@/components/icons';
 
 export default function Home() {
-  return (
-    <div className="flex flex-col min-h-screen">
-      <header className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <Icons.logo className="h-8 w-8 text-primary" />
-          <h1 className="text-2xl font-bold font-headline text-primary">
-            CityConnect
-          </h1>
-        </div>
-        <Button asChild variant="ghost">
-          <Link href="/citizen/dashboard">Login</Link>
-        </Button>
-      </header>
-      <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold font-headline tracking-tighter sm:text-5xl xl:text-6xl/none">
-                    Report Issues. Get Results.
-                  </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
-                    CityConnect is your direct line to city services. Submit and
-                    track complaints effortlessly, and help us build a better
-                    community together.
-                  </p>
-                </div>
-                <Button asChild size="lg">
-                  <Link href="/citizen/submit">
-                    <span>
-                      File a New Complaint
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </span>
-                  </Link>
-                </Button>
-              </div>
-              <div
-                className="w-full max-w-md mx-auto"
-                data-ai-hint="city skyline"
-              >
-                <img
-                  src="https://placehold.co/600x600.png"
-                  alt="Hero"
-                  className="mx-auto aspect-square overflow-hidden rounded-xl object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </section>
+  const [user, setUser] = useState<any>(null);
 
-        <section id="roles" className="w-full py-12 md:py-24 bg-muted">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold font-headline tracking-tighter sm:text-4xl">
-                  Access for Everyone
-                </h2>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Tailored dashboards for citizens, department officers, and
-                  administrators to ensure efficiency and transparency.
-                </p>
-              </div>
-            </div>
-            <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-2 md:gap-12 lg:grid-cols-3 lg:max-w-none mt-12">
-              <RoleCard
-                href="/citizen/dashboard"
-                icon={<Icons.user className="h-8 w-8" />}
-                title="Citizen Portal"
-                description="Submit new complaints, track the status of your existing reports, and view your history."
-              />
-              <RoleCard
-                href="/department/dashboard"
-                icon={<Icons.building className="h-8 w-8" />}
-                title="Department Login"
-                description="View assigned complaints, update their status, and monitor departmental performance."
-              />
-              <RoleCard
-                href="/admin/dashboard"
-                icon={<Icons.shield className="h-8 w-8" />}
-                title="Admin Dashboard"
-                description="Oversee all operations, manage users and departments, and view system-wide analytics."
-              />
-            </div>
-          </div>
-        </section>
-      </main>
-      <footer className="bg-primary text-primary-foreground py-6">
-        <div className="container mx-auto px-4 md:px-6 text-center">
-          <p>&copy; {new Date().getFullYear()} CityConnect. All rights reserved.</p>
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, setUser);
+    return () => unsub();
+  }, []);
+
+  return (
+    <div className="flex flex-col min-h-screen bg-background">
+      {/* Navbar */}
+      <nav className="w-full px-6 py-4 bg-card shadow-md flex justify-between items-center">
+        <div className="flex items-center space-x-2">
+          <Icons.logo className="h-8 w-8 text-primary" />
+          <span className="font-headline text-xl text-primary">CityConnect</span>
         </div>
+        <div className="space-x-4 hidden md:flex">
+          <Link href="#features" className="text-foreground hover:text-primary">Features</Link>
+          <Link href="#about" className="text-foreground hover:text-primary">About</Link>
+          <Link href="#contact" className="text-foreground hover:text-primary">Contact</Link>
+        </div>
+        <div>
+          {user
+            ? <Button asChild variant="secondary"><Link href="/login">My Account</Link></Button>
+            : <Button asChild><Link href="/login">Login / Register</Link></Button>
+          }
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <header className="relative flex-1 flex items-center justify-center bg-gradient-to-br from-primary/60 to-accent/60 text-white text-center py-20 px-4">
+        <div className="max-w-3xl space-y-6">
+          <h1 className="text-4xl md:text-6xl font-bold leading-tight">Report Issues. Get Results.</h1>
+          <p className="text-lg md:text-xl">CityConnect is your direct line to city services. Submit and track complaints effortlessly, and help build a better community together.</p>
+          <div className="space-x-4">
+            <Button asChild size="lg"><Link href="/citizen/submit">File a New Complaint</Link></Button>
+            <Button asChild variant="secondary" size="lg"><Link href="/login">Login / Register</Link></Button>
+          </div>
+        </div>
+        <div className="absolute bottom-0 right-0 opacity-20">
+          <img src="/city-silhouette.svg" alt="City graphic" className="w-96 h-auto" />
+        </div>
+      </header>
+
+      {/* Roles Section */}
+      <section id="features" className="py-16 px-6 bg-secondary text-secondary-foreground">
+        <h2 className="text-3xl md:text-4xl font-headline text-center mb-8">Access for Everyone</h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <RoleCard href="/citizen/dashboard" icon={<Icons.user className="h-8 w-8" />} title="Citizen Portal" description="Submit and track complaints and view your interaction history." />
+          <RoleCard href="/department/dashboard" icon={<Icons.building className="h-8 w-8" />} title="Department Login" description="Manage and resolve assigned complaints efficiently." />
+          <RoleCard href="/admin/dashboard" icon={<Icons.shield className="h-8 w-8" />} title="Admin Dashboard" description="Monitor city-wide issues and manage platform-wide settings." />
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-6 bg-card text-center text-sm text-muted-foreground">
+        © {new Date().getFullYear()} CityConnect. All rights reserved.
       </footer>
     </div>
   );
 }
 
-function RoleCard({
-  href,
-  icon,
-  title,
-  description,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}) {
+function RoleCard({ href, icon, title, description }: { href: string, icon: React.ReactNode, title: string, description: string }) {
   return (
-    <Link href={href} className="group">
-      <Card className="h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-        <CardHeader className="flex flex-row items-center gap-4">
-          <div className="bg-primary/10 text-primary p-3 rounded-full">
-            {icon}
-          </div>
-          <CardTitle className="font-headline">{title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">{description}</p>
-        </CardContent>
-      </Card>
+    <Link href={href}>
+      <div className="p-6 bg-card rounded shadow hover:shadow-lg hover:-translate-y-1 transition-transform h-full">
+        <div className="flex items-center gap-4 mb-4">
+          <div className="bg-primary/10 text-primary p-3 rounded-full">{icon}</div>
+          <h3 className="text-lg font-headline">{title}</h3>
+        </div>
+        <p className="text-muted-foreground">{description}</p>
+      </div>
     </Link>
   );
 }

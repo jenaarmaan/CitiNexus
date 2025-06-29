@@ -1,4 +1,7 @@
 {
-    "IDX.aI.enableInlineCompletion": true,
-    "IDX.aI.enableCodebaseIndexing": true
+  "css.validate": false,
+  "tailwindCSS.experimental.configFile": "./tailwind.config.js",
+  "editor.quickSuggestions": {
+    "strings": true
+  }
 }
